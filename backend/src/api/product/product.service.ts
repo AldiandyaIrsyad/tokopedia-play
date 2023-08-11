@@ -14,7 +14,7 @@ export interface IProductService {
   ) => Promise<IProduct>;
   getAll: () => Promise<IProduct[]>;
   getById: (_id: string) => Promise<IProduct>;
-  getProductsByUserId: (token: string) => Promise<IProduct[]>;
+  getProductsByUserId: (userId: string) => Promise<IProduct[]>;
   getProductsByVideoId: (videoId: string) => Promise<IProduct[]>;
 }
 
@@ -80,8 +80,7 @@ export class ProductService implements IProductService {
     return product;
   }
 
-  public async getProductsByUserId(token: string): Promise<IProduct[]> {
-    const userId = getUserIdFromToken(token);
+  public async getProductsByUserId(userId: string): Promise<IProduct[]> {
     const products = await this.productModel.getProductsByVideoId(userId);
 
     return products;

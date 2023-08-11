@@ -68,9 +68,8 @@ export class ProductController implements IProductController {
 
   public async getProductsByUserId(req: Request, res: Response): Promise<void> {
     try {
-      const { token } = req.cookies;
-
-      const products = await this.productService.getProductsByUserId(token);
+      const { id } = req.params;
+      const products = await this.productService.getProductsByUserId(id);
 
       res.status(200).json(products);
     } catch (error) {

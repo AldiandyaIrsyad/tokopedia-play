@@ -57,9 +57,20 @@ export class CommentController implements ICommentController {
 
   async getCommentsByUserId(req: Request, res: Response): Promise<void> {
     try {
+      const comments = await this.commentService.getCommentsByUserId(
+        req.params.id
+      );
+      res.status(200).json(comments);
+    } catch (error) {
+      res.status(500).json(getErrorMessage(error));
+    }
+  }
 
-      const { token } = req.cookies;
-      const comments = await this.commentService.getByUserId(req.params.id);
+  async getCommentsByVideoId(req: Request, res: Response): Promise<void> {
+    try {
+      const comments = await this.commentService.getCommentsByVideoId(
+        req.params.id
+      );
       res.status(200).json(comments);
     } catch (error) {
       res.status(500).json(getErrorMessage(error));

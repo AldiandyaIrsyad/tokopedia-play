@@ -77,8 +77,7 @@ export class CommentService implements ICommentService {
     return comments;
   }
 
-  public async getCommentsByUserId(token: string): Promise<IComment[]> {
-    const userId = getUserIdFromToken(token);
+  public async getCommentsByUserId(userId: string): Promise<IComment[]> {
 
     const comments = await this.commentModel.getCommentsByUserId(userId);
 
