@@ -2,10 +2,14 @@ import jwt from 'jsonwebtoken';
 
 import { IUser, IUserModel } from './user.model';
 export interface IUserService {
-  register: (username: string, email: string, password: string) => Promise<any>;
+  register: (
+    username: string,
+    email: string,
+    password: string
+  ) => Promise<IUser>;
   login: (username: string, password: string) => Promise<string>;
-  getAll: () => Promise<any>;
-  getById: (id: string) => Promise<any>;
+  getAll: () => Promise<IUser[]>;
+  getById: (id: string) => Promise<IUser>;
 }
 
 export class UserService implements IUserService {
@@ -24,7 +28,7 @@ export class UserService implements IUserService {
     username: string,
     email: string,
     password: string
-  ): Promise<any> {
+  ): Promise<IUser> {
     const user = await this.userModel.create({
       username,
       email,
@@ -47,13 +51,16 @@ export class UserService implements IUserService {
     return token;
   }
 
-  public async getAll(): Promise<any> {
+  public async getAll(): Promise<IUser[]> {
     const users = await this.userModel.getAll();
     return users;
   }
 
-  public async getById(id: string): Promise<any> {
+  public async getById(id: string): Promise<IUser> {
     const user = await this.userModel.getById(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
     return user;
   }
 }

@@ -1,15 +1,13 @@
-// import jwt from 'jsonwebtoken';
-
 import { IVideo, IVideoModel } from './video.model';
-import { IUser, IUserModel } from '../user/user.model';
-import { IUserService } from '../user';
-import jwt from 'jsonwebtoken';
+import { IUserModel } from '../user/user.model';
+
+import { getUserIdFromToken } from '../../helpers/getUserIdFromToken';
 
 export interface IVideoService {
-  create: (title: string, thumbnail: string, token: string) => Promise<any>;
-  getAll: () => Promise<any>;
-  getById: (id: string) => Promise<any>;
-  getVideosByUserId: (id: string) => Promise<any>;
+  create: (title: string, thumbnail: string, token: string) => Promise<IVideo>;
+  getAll: () => Promise<IVideo[]>;
+  getById: (id: string) => Promise<IVideo>;
+  getVideosByUserId: (id: string) => Promise<IVideo[]>;
 }
 
 export class VideoService implements IVideoService {
@@ -25,17 +23,10 @@ export class VideoService implements IVideoService {
     title: string,
     thumbnail: string,
     token: string
-  ): Promise<any> {
-    console.log('entering service');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-    const tokenString = JSON.stringify(decoded);
-    const tokenObject = JSON.parse(tokenString);
-    const userID = tokenObject.id;
-    console.log('done parsing token: ', userID);
-
+  ): Promise<IVideo> {
+    const userID = getUserIdFromToken(token);
     const user = await this.userModel.getById(userID);
 
-    console.log('user: ', user);
     if (!user) {
       throw new Error('User not found');
     }
@@ -44,23 +35,17 @@ export class VideoService implements IVideoService {
       title,
       thumbnail,
       user: user._id.toString(),
-      views: 0,
     } as IVideo;
 
-    console.log('done creating video: ', video);
-
-    const newVideo = await this.videoModel.create(video);
-    console.log('done creating video: ', newVideo);
-
-    return newVideo;
+    return await this.videoModel.create(video);
   }
 
-  public async getAll(): Promise<any> {
+  public async getAll(): Promise<IVideo[]> {
     const videos = await this.videoModel.getAll();
     return videos;
   }
 
-  public async getById(id: string): Promise<any> {
+  public async getById(id: string): Promise<IVideo> {
     const video = await this.videoModel.getById(id);
     if (!video) {
       throw new Error('Video not found');
@@ -68,7 +53,7 @@ export class VideoService implements IVideoService {
     return video;
   }
 
-  public async getVideosByUserId(id: string): Promise<any> {
+  public async getVideosByUserId(id: string): Promise<IVideo[]> {
     const videos = await this.videoModel.getVideosByUserId(id);
     if (!videos) {
       throw new Error('Videos not found');

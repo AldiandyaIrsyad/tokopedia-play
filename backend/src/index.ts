@@ -16,7 +16,12 @@ import {
 } from './api/video';
 
 import { CommentModel } from './api/comment/comment.model';
-import { ProductModel } from './api/product/product.model';
+import {
+  ProductModel,
+  ProductService,
+  ProductController,
+  ProductRouter,
+} from './api/product/';
 
 const userModelInstance = new UserModel(mongoose.connection);
 const userServiceInstance = new UserService(userModelInstance);
@@ -31,8 +36,17 @@ const videoServiceInstance = new VideoService(
 const videoControllerInstance = new VideoController(videoServiceInstance);
 const videoRouterInstance = new VideoRouter(videoControllerInstance);
 
-const commentModelInstance = new CommentModel(mongoose.connection);
 const productModelInstance = new ProductModel(mongoose.connection);
+const productServiceInstance = new ProductService(
+  productModelInstance,
+  userModelInstance,
+  videoModelInstance
+);
+const productControllerInstance = new ProductController(productServiceInstance);
+
+const productRouterInstance = new ProductRouter(productControllerInstance);
+
+const commentModelInstance = new CommentModel(mongoose.connection);
 
 const app = express();
 app.use(cors());
@@ -41,6 +55,7 @@ app.use(express.json());
 
 app.use('/api/video', videoRouterInstance.getRouter());
 app.use('/api/user', userRouterInstance.getRouter());
+app.use('/api/product', productRouterInstance.getRouter());
 
 app.listen(5000, () => {
   console.log('Server started');

@@ -5,20 +5,55 @@ import { IVideo } from '../video/video.model';
 
 export interface IComment extends Document {
   text: string;
-  createdAt: Date;
-  updatedAt: Date;
-  likes: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  likes?: number;
   user?: IUser;
   video?: IVideo;
 }
 
-export class CommentModel {
+export interface ICommentModel {
+  create(comment: IComment): Promise<IComment>;
+  getById(id: string): Promise<IComment | null>;
+  getAll(): Promise<IComment[]>;
+  getCommentsByVideoId(videoId: string): Promise<IComment[]>;
+  getCommentsByUserId(userId: string): Promise<IComment[]>;
+}
+
+export class CommentModel implements ICommentModel {
   private model: Model<IComment>;
   private connection: Connection;
 
   constructor(connection: Connection) {
     this.connection = connection;
     this.model = defineModel(connection);
+
+    // bind
+    this.create = this.create.bind(this);
+    this.getById = this.getById.bind(this);
+    this.getAll = this.getAll.bind(this);
+    this.getCommentsByVideoId = this.getCommentsByVideoId.bind(this);
+    this.getCommentsByUserId = this.getCommentsByUserId.bind(this);
+  }
+
+  async create(comment: IComment): Promise<IComment> {
+    return this.model.create(comment);
+  }
+
+  async getById(id: string): Promise<IComment | null> {
+    return this.model.findById(id).populate('user video');
+  }
+
+  async getAll(): Promise<IComment[]> {
+    return this.model.find();
+  }
+
+  async getCommentsByVideoId(videoId: string): Promise<IComment[]> {
+    return this.model.find({ video: videoId });
+  }
+
+  async getCommentsByUserId(userId: string): Promise<IComment[]> {
+    return this.model.find({ user: userId });
   }
 }
 
@@ -43,12 +78,14 @@ const defineModel = (connection: Connection): Model<IComment> => {
 
     await VideoModel.updateOne(
       { _id: comment.video },
-      { $push: { comments: comment._id }, $slice: { comments: -30 } }
+      { $push: { comments: comment._id } },
+      { $slice: { comments: -30 } }
     );
 
     await UserModel.updateOne(
       { _id: comment.user },
-      { $push: { comments: comment._id }, $slice: { comments: -30 } }
+      { $push: { comments: comment._id } },
+      { $slice: { comments: -30 } }
     );
 
     next();

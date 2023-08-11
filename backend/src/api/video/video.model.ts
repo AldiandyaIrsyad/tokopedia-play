@@ -30,16 +30,12 @@ export class VideoModel implements IVideoModel {
 
   public create(video: IVideo): Promise<IVideo> {
     return this.model.create(video);
-    // video example
-    // {
-    //   "title": "Video title",
-    //   "thumbnail": "https://i.ytimg.com/vi/9bZkp7q19f0/maxresdefault.jpg",
-    //   "user": "5f9b3b9b9b9b9b9b9b9b9b9b"
-    // }
   }
 
   public getById(id: string): Promise<IVideo | null> {
-    return this.model.findById(id).populate('user comments products');
+    return this.model
+      .findByIdAndUpdate({ _id: id }, { $inc: { views: 1 } })
+      .populate('user comments products');
   }
 
   public getAll(): Promise<IVideo[]> {
@@ -77,7 +73,7 @@ const defineModel = (connection: Connection): Model<IVideo> => {
     await UserModel.updateOne(
       { _id: video.user },
       { $push: { videos: video._id } },
-      { $slice: { videos: -10 } }
+      { $slice: { videos: -30 } }
     );
 
     next();
