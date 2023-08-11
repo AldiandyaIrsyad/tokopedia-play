@@ -4,7 +4,12 @@ import { IUserModel } from '../user/user.model';
 import { getUserIdFromToken } from '../../helpers/getUserIdFromToken';
 
 export interface IVideoService {
-  create: (title: string, thumbnail: string, token: string) => Promise<IVideo>;
+  create: (
+    title: string,
+    thumbnail: string,
+    token: string,
+    url: string
+  ) => Promise<IVideo>;
   getAll: () => Promise<IVideo[]>;
   getById: (id: string) => Promise<IVideo>;
   getVideosByUserId: (id: string) => Promise<IVideo[]>;
@@ -22,7 +27,8 @@ export class VideoService implements IVideoService {
   public async create(
     title: string,
     thumbnail: string,
-    token: string
+    token: string,
+    url: string
   ): Promise<IVideo> {
     const userID = getUserIdFromToken(token);
     const user = await this.userModel.getById(userID);
@@ -35,6 +41,7 @@ export class VideoService implements IVideoService {
       title,
       thumbnail,
       user: user._id.toString(),
+      url,
     } as IVideo;
 
     return await this.videoModel.create(video);

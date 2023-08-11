@@ -48,7 +48,7 @@ export class CommentModel implements ICommentModel {
   }
 
   async getCommentsByVideoId(videoId: string): Promise<IComment[]> {
-    return this.model.find({ video: videoId });
+    return this.model.find({ video: videoId }).populate('user');
   }
 
   async getCommentsByUserId(userId: string): Promise<IComment[]> {

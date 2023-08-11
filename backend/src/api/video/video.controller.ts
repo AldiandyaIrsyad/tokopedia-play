@@ -1,4 +1,3 @@
-
 import { IVideoService } from './video.service';
 
 import { Request, Response } from 'express';
@@ -47,8 +46,13 @@ export class VideoController implements IVideoController {
     try {
       const { token } = req.cookies;
 
-      const { title, thumbnail } = req.body;
-      const video = await this.videoService.create(title, thumbnail, token);
+      const { title, thumbnail, url } = req.body;
+      const video = await this.videoService.create(
+        title,
+        thumbnail,
+        token,
+        url
+      );
       res.status(200).json(video);
     } catch (error) {
       res.status(400).json({ error: getErrorMessage(error) });

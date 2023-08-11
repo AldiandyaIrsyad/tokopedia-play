@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node backend/dist/index.js",
-    "dev": "concurrently \"tsc -w\" \"nodemon backend/dist/index.js\""
+    "dev": "concurrently \"tsc -w\" \"nodemon backend/dist/index.js\"",
+    "seeder": "tsc --build && node backend/dist/seeder.js"
   },
   "keywords": [],
   "author": "Aldiandya Irsyad",

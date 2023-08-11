@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 
 import { IUser, IUserModel } from './user.model';
+import { getUserIdFromToken } from '../../helpers/getUserIdFromToken';
+
 export interface IUserService {
   register: (
     username: string,
@@ -10,6 +12,7 @@ export interface IUserService {
   login: (username: string, password: string) => Promise<string>;
   getAll: () => Promise<IUser[]>;
   getById: (id: string) => Promise<IUser>;
+  getByToken: (token: string) => Promise<IUser>;
 }
 
 export class UserService implements IUserService {
@@ -57,6 +60,15 @@ export class UserService implements IUserService {
   }
 
   public async getById(id: string): Promise<IUser> {
+    const user = await this.userModel.getById(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
+  }
+
+  public async getByToken(token: string): Promise<IUser> {
+    const id = getUserIdFromToken(token);
     const user = await this.userModel.getById(id);
     if (!user) {
       throw new Error('User not found');

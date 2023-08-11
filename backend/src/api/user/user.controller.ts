@@ -8,6 +8,7 @@ export interface IUserController {
   login(req: Request, res: Response): Promise<void>;
   getAllUsers(req: Request, res: Response): Promise<void>;
   getUserById(req: Request, res: Response): Promise<void>;
+  getMe(req: Request, res: Response): Promise<void>;
 }
 
 export class UserController implements IUserController {
@@ -58,6 +59,15 @@ export class UserController implements IUserController {
     try {
       const { id } = req.params;
       const user = await this.userService.getById(id);
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(400).json({ error: getErrorMessage(error) });
+    }
+  }
+
+  public async getMe(req: Request, res: Response): Promise<void> {
+    try {
+      const user = await this.userService.getByToken(req.cookies.token);
       res.status(200).json(user);
     } catch (error) {
       res.status(400).json({ error: getErrorMessage(error) });

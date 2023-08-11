@@ -7,6 +7,7 @@ import { IProduct } from '../product/product.model';
 export interface IVideo extends Document {
   title: string;
   thumbnail: string;
+  url: string;
   views?: number;
   createdAt?: Date;
   user?: IUser;
@@ -33,20 +34,28 @@ export class VideoModel implements IVideoModel {
   }
 
   public getById(id: string): Promise<IVideo | null> {
-    return this.model
+    const video = this.model
       .findByIdAndUpdate({ _id: id }, { $inc: { views: 1 } })
       .populate('user comments products');
+
+    // populate comments
+    video.populate({
+      path: 'comments',
+      populate: {
+        path: 'user',
+      },
+    });
+
+    return video;
   }
 
   public getAll(): Promise<IVideo[]> {
-    return this.model.find();
+    return this.model.find().populate('user');
   }
 
   public getVideosByUserId(userId: string): Promise<IVideo[]> {
     return this.model.find({ user: userId });
   }
-
-
 }
 
 const defineModel = (connection: Connection): Model<IVideo> => {
@@ -59,6 +68,18 @@ const defineModel = (connection: Connection): Model<IVideo> => {
         validate: {
           validator: (v: string) => {
             return /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/.test(v);
+          },
+        },
+      },
+      url: {
+        type: String,
+        required: true,
+        validate: {
+          validator: (v: string) => {
+            // youtube
+            return /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)/.test(
+              v
+            );
           },
         },
       },
