@@ -9,9 +9,9 @@ import bcrypt from 'bcrypt';
 export interface IUser extends Document {
   username: string;
   email: string;
-  password?: string;
   role: 'admin' | 'user';
   description: string;
+  password?: string;
   videos?: IVideo[];
   comments?: IComment[];
   products?: IProduct[];

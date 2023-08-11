@@ -20,13 +20,25 @@ import {
   CommentService,
   CommentController,
   CommentRouter,
+  CommentSocket,
 } from './api/comment/';
+
 import {
   ProductModel,
   ProductService,
   ProductController,
   ProductRouter,
 } from './api/product/';
+
+import http from 'http';
+
+const app = express();
+const server = http.createServer(app);
+
+const commentSocketInstance = new CommentSocket(server);
+
+// to connect to socket use this address
+// http://localhost:5000/socket.io/socket.io.js
 
 const userModelInstance = new UserModel(mongoose.connection);
 const userServiceInstance = new UserService(userModelInstance);
@@ -55,13 +67,13 @@ const commentModelInstance = new CommentModel(mongoose.connection);
 const commentServiceInstance = new CommentService(
   commentModelInstance,
   userModelInstance,
-  videoModelInstance
+  videoModelInstance,
+  commentSocketInstance
 );
 const commentControllerInstance = new CommentController(commentServiceInstance);
 
 const commentRouterInstance = new CommentRouter(commentControllerInstance);
 
-const app = express();
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
@@ -71,7 +83,7 @@ app.use('/api/user', userRouterInstance.getRouter());
 app.use('/api/product', productRouterInstance.getRouter());
 app.use('/api/comment', commentRouterInstance.getRouter());
 
-app.listen(5000, () => {
+server.listen(5000, () => {
   console.log('Server started');
 });
 

@@ -18,14 +18,13 @@ export interface IProductModel {
   getAll(): Promise<IProduct[]>;
   getProductsByVideoId(videoId: string): Promise<IProduct[]>;
   getProductsByUserId(userId: string): Promise<IProduct[]>;
+  searchProductsByTitle(title: string): Promise<IProduct[]>;
 }
 
 export class ProductModel implements IProductModel {
   public model: Model<IProduct>;
-  private connection: Connection;
 
   constructor(connection: Connection) {
-    this.connection = connection;
     this.model = defineModel(connection);
 
     // bind
@@ -54,6 +53,12 @@ export class ProductModel implements IProductModel {
 
   public async getProductsByUserId(userId: string): Promise<IProduct[]> {
     return this.model.find({ user: userId });
+  }
+
+  public async searchProductsByTitle(title: string): Promise<IProduct[]> {
+    return this.model
+      .find({ $text: { $search: title } })
+      .populate('user video');
   }
 }
 

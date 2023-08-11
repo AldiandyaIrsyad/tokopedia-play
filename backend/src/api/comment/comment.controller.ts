@@ -47,7 +47,8 @@ export class CommentController implements ICommentController {
       const { token } = req.cookies;
 
       const { text, videoId } = req.body;
-      const comment = await this.commentService.create(text, videoId, token);
+
+      const comment = await this.commentService.create(text, token, videoId);
 
       res.status(201).json(comment);
     } catch (error) {

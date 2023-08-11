@@ -3,6 +3,7 @@ import { getUserIdFromToken } from '../../helpers/getUserIdFromToken';
 import { IComment, ICommentModel } from './comment.model';
 import { IUserModel } from '../user';
 import { IVideoModel } from '../video';
+import { ICommentSocket } from './comment.socket';
 
 export interface ICommentService {
   create(text: string, token: string, videoId: string): Promise<IComment>;
@@ -16,15 +17,24 @@ export class CommentService implements ICommentService {
   private readonly commentModel: ICommentModel;
   private readonly userModel: IUserModel;
   private readonly videoModel: IVideoModel;
+  private readonly commentSocket: ICommentSocket;
 
   constructor(
     commentModel: ICommentModel,
     userModel: IUserModel,
-    videoModel: IVideoModel
+    videoModel: IVideoModel,
+    commentSocket: ICommentSocket
   ) {
     this.commentModel = commentModel;
     this.userModel = userModel;
     this.videoModel = videoModel;
+    this.commentSocket = commentSocket;
+
+    // bind
+    this.create = this.create.bind(this);
+    this.getAll = this.getAll.bind(this);
+    this.getById = this.getById.bind(this);
+    this.getCommentsByVideoId = this.getCommentsByVideoId.bind(this);
   }
 
   public async create(
@@ -33,7 +43,6 @@ export class CommentService implements ICommentService {
     videoId: string
   ): Promise<IComment> {
     const userId = getUserIdFromToken(token);
-
     const user = await this.userModel.getById(userId);
 
     if (!user) {
@@ -51,6 +60,8 @@ export class CommentService implements ICommentService {
       user,
       video,
     } as IComment);
+
+    this.commentSocket.addComment(comment);
 
     return comment;
   }
@@ -78,7 +89,6 @@ export class CommentService implements ICommentService {
   }
 
   public async getCommentsByUserId(userId: string): Promise<IComment[]> {
-
     const comments = await this.commentModel.getCommentsByUserId(userId);
 
     return comments;

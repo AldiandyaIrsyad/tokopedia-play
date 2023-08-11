@@ -4,6 +4,7 @@ import { IUser } from '../user/user.model';
 import { IVideo } from '../video/video.model';
 
 export interface IComment extends Document {
+  _id?: string;
   text: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -22,10 +23,8 @@ export interface ICommentModel {
 
 export class CommentModel implements ICommentModel {
   private model: Model<IComment>;
-  private connection: Connection;
 
   constructor(connection: Connection) {
-    this.connection = connection;
     this.model = defineModel(connection);
 
     // bind

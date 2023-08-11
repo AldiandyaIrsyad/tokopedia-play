@@ -10,6 +10,7 @@ export interface IProductController {
   createProduct(req: Request, res: Response): Promise<void>;
   getProductsByUserId(req: Request, res: Response): Promise<void>;
   getProductsByVideoId(req: Request, res: Response): Promise<void>;
+  searchProducts(req: Request, res: Response): Promise<void>;
 }
 
 export class ProductController implements IProductController {
@@ -24,6 +25,7 @@ export class ProductController implements IProductController {
     this.createProduct = this.createProduct.bind(this);
     this.getProductsByUserId = this.getProductsByUserId.bind(this);
     this.getProductsByVideoId = this.getProductsByVideoId.bind(this);
+    this.searchProducts = this.searchProducts.bind(this);
   }
 
   public async getAllProducts(req: Request, res: Response): Promise<void> {
@@ -85,6 +87,20 @@ export class ProductController implements IProductController {
       const { videoId } = req.params;
 
       const products = await this.productService.getProductsByVideoId(videoId);
+
+      res.status(200).json(products);
+    } catch (error) {
+      res.status(500).json(getErrorMessage(error));
+    }
+  }
+
+  public async searchProducts(req: Request, res: Response): Promise<void> {
+    try {
+      const { title } = req.query;
+
+      const products = await this.productService.searchProducts(
+        title as string
+      );
 
       res.status(200).json(products);
     } catch (error) {

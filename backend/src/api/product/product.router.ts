@@ -22,5 +22,6 @@ export class ProductRouter {
     this.router.post('/', this.controller.createProduct);
     this.router.get('/user/:id', this.controller.getProductsByUserId);
     this.router.get('/video/:id', this.controller.getProductsByVideoId);
+    this.router.post('/search', this.controller.searchProducts);
   }
 }

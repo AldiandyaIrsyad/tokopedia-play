@@ -45,13 +45,23 @@ export class VideoModel implements IVideoModel {
   public getVideosByUserId(userId: string): Promise<IVideo[]> {
     return this.model.find({ user: userId });
   }
+
+
 }
 
 const defineModel = (connection: Connection): Model<IVideo> => {
   const VideoSchema = new Schema<IVideo>(
     {
       title: { type: String, required: true },
-      thumbnail: { type: String, required: true },
+      thumbnail: {
+        type: String,
+        required: true,
+        validate: {
+          validator: (v: string) => {
+            return /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/.test(v);
+          },
+        },
+      },
       views: { type: Number, default: 0 },
       user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
       comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],

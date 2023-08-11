@@ -38,6 +38,7 @@ export class UserController implements IUserController {
     try {
       const { email, password } = req.body;
       const token = await this.userService.login(email, password);
+
       res.cookie('token', token, { httpOnly: true }).sendStatus(200);
     } catch (error) {
       res.status(400).json({ error: getErrorMessage(error) });

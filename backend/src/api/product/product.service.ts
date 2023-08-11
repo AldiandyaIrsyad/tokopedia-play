@@ -16,6 +16,7 @@ export interface IProductService {
   getById: (_id: string) => Promise<IProduct>;
   getProductsByUserId: (userId: string) => Promise<IProduct[]>;
   getProductsByVideoId: (videoId: string) => Promise<IProduct[]>;
+  searchProducts: (text: string) => Promise<IProduct[]>;
 }
 
 export class ProductService implements IProductService {
@@ -88,6 +89,16 @@ export class ProductService implements IProductService {
 
   public async getProductsByVideoId(videoId: string): Promise<IProduct[]> {
     const products = await this.productModel.getProductsByVideoId(videoId);
+
+    if (!products) {
+      throw new Error('Products not found');
+    }
+
+    return products;
+  }
+
+  public async searchProducts(text: string): Promise<IProduct[]> {
+    const products = await this.productModel.searchProductsByTitle(text);
 
     if (!products) {
       throw new Error('Products not found');
