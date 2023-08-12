@@ -4,12 +4,12 @@ import './index.css';
 import { Routes } from '@generouted/react-router';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Routes />
-  </React.StrictMode>
+  // <React.StrictMode>
+  //   <Routes />
+  // </React.StrictMode>
 
   // non-strict mode
-  // <React.Fragment>
-  //   <Routes />
-  // </React.Fragment>
+  <React.Fragment>
+    <Routes />
+  </React.Fragment>
 );

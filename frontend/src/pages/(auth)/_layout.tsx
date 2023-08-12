@@ -3,6 +3,8 @@ import { Outlet } from 'react-router-dom';
 // import something to check current url
 import { useLocation, Link } from 'react-router-dom';
 
+import tokopedia from '@/assets/tokopedia.svg';
+
 export default function _layout() {
   const location = useLocation();
   // get current url
@@ -17,11 +19,7 @@ export default function _layout() {
       <div className="w-screen sm:max-w-xl  bg-white shadow-md pt-12 px-8 pb-10 ">
         <Link to="/">
           <div className="w-full h-14 mb-6 flex justify-center">
-            <img
-              src="https://assets.tokopedia.net/assets-tokopedia-lite/v2/zeus/kratos/581fca3a.png"
-              alt=""
-              className=" block "
-            />
+            <img src={tokopedia} alt="" />
           </div>
         </Link>
 

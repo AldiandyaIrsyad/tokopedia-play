@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dotenv from 'dotenv';
 import generouted from '@generouted/react-router/plugin';
+import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 
@@ -18,6 +19,13 @@ export default defineConfig(({ mode }) => {
           secure: false,
           // rewrite: (path) => path.replace(/^\/api/, ''),
         },
+      },
+    },
+
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, 'src'),
+        '#root': resolve(__dirname),
       },
     },
   };

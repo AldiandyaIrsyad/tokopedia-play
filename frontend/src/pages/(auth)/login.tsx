@@ -1,6 +1,7 @@
 import { Formik, Form } from 'formik';
 import InputField from './_inputField';
 import Button from './_button';
+// import Button from '@/components/Button';
 
 import * as Yup from 'yup';
 
@@ -59,7 +60,7 @@ export default function Login() {
                 touched={touched.password}
               />
 
-              <Button text="Login" disabled={isSubmitting} />
+              <Button disabled={isSubmitting}>Login</Button>
             </Form>
           )}
         </Formik>

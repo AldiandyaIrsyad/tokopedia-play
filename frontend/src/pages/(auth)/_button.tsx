@@ -1,17 +1,11 @@
-export default function Button({
-  text,
-  disabled,
-}: {
-  text: string;
-  disabled: boolean;
-}) {
+export default function Button({ children, disabled = true }: any) {
   return (
     <button
       type="submit"
       className="bg-green-600 text-white py-4 flex w-full justify-center rounded-md"
       disabled={disabled}
     >
-      <div>{text}</div>
+      <div>{children}</div>
     </button>
   );
 }
