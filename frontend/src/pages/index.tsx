@@ -43,7 +43,7 @@ export default function index() {
       <div className="debug p-4 flex flex-wrap gap-5 ">
         {/* < */}
         {videos.map((video: any) => (
-          <Video key={video.id} {...video} />
+          <Video key={video._id} {...video} />
         ))}
       </div>
     </div>

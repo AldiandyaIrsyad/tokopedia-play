@@ -12,11 +12,13 @@
   "dependencies": {
     "@generouted/react-router": "^1.15.4",
     "axios": "^1.4.0",
+    "formik": "^2.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
     "socket.io-client": "^4.7.2",
-    "tokopediaplayv2": "file:.."
+    "tokopediaplayv2": "file:..",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

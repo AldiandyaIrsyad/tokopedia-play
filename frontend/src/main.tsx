@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
 import './index.css';
+import { Routes } from '@generouted/react-router';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  // <React.StrictMode>
-  //   <App />
-  // </React.StrictMode>
+  <React.StrictMode>
+    <Routes />
+  </React.StrictMode>
 
   // non-strict mode
-  <React.Fragment>
-    <App />
-  </React.Fragment>
+  // <React.Fragment>
+  //   <Routes />
+  // </React.Fragment>
 );

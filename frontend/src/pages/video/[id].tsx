@@ -166,12 +166,6 @@ export default function video() {
           </div>
         </div>
       </div>
-
-      <div>
-        <code>
-          <pre>{JSON.stringify(video, null, 2)}</pre>
-        </code>
-      </div>
     </div>
   );
 }
