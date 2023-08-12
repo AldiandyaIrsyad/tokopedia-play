@@ -7,13 +7,18 @@ import cookieParser from 'cookie-parser';
 dotenv.config();
 
 // import everything in api/user
-import { UserModel, UserService, UserController, UserRouter } from './api/user';
+import {
+  UserModel,
+  UserService,
+  UserController,
+  UserRouter,
+} from './module/user';
 import {
   VideoModel,
   VideoService,
   VideoController,
   VideoRouter,
-} from './api/video';
+} from './module/video';
 
 import {
   CommentModel,
@@ -21,24 +26,19 @@ import {
   CommentController,
   CommentRouter,
   CommentSocket,
-} from './api/comment/';
+} from './module/comment/';
 
 import {
   ProductModel,
   ProductService,
   ProductController,
   ProductRouter,
-} from './api/product/';
+} from './module/product/';
 
 import http from 'http';
 
 const app = express();
 const server = http.createServer(app);
-
-const commentSocketInstance = new CommentSocket(server);
-
-// to connect to socket use this address
-// http://localhost:5000/socket.io/socket.io.js
 
 const userModelInstance = new UserModel(mongoose.connection);
 const userServiceInstance = new UserService(userModelInstance);
@@ -63,6 +63,7 @@ const productControllerInstance = new ProductController(productServiceInstance);
 
 const productRouterInstance = new ProductRouter(productControllerInstance);
 
+const commentSocketInstance = new CommentSocket(server);
 const commentModelInstance = new CommentModel(mongoose.connection);
 const commentServiceInstance = new CommentService(
   commentModelInstance,
