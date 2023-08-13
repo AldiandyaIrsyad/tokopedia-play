@@ -5,7 +5,6 @@ import { IComment } from '../comment/comment.model';
 import { IProduct } from '../product/product.model';
 
 export interface IVideo extends Document {
-  _id?: string;
   title: string;
   thumbnail: string;
   url: string;

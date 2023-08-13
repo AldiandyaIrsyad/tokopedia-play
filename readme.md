@@ -19,15 +19,16 @@ Other than that I have also done:
 1. Authentication using Bcrypt, JWT Token on HTTP only cookie.
 1. Create additional API to create video, product.
 1. Using token for comment instead of inserting username manually
-1. Automatically add views when user click on video
+1. Automatically add views when user click on video.
+1. Creating register page.
 
 ## How to run
 
 You can run the application using Dockerfile that is enter the following code
 
 ```
-docker build -t tokopedia-play-mvp .
-docker run -p 5173:5173 tokopedia-play-mvp
+docker-compose build
+docker-compose up
 ```
 
 You can run without using docker by running the following code
@@ -37,6 +38,10 @@ npm install
 npm install --prefix frontend
 npm run both
 ```
+
+please note that you need to setup your own `.env` file. You can use `.env.example` immediately.
+
+Also please note using seed=true will wipe the database.
 
 This will run dev on both frontend and backend using concurrently
 

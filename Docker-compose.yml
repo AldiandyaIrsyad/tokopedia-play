@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    environment:
+      mongodbURI: mongodb://mongodb:27017/mydb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      mongodbURI: mongodb://mongodb:27017/mydb
+      seed: true
+      VITE_API_BASE_URL: http://localhost:5000
+      # please override these in production
+      JWT_SECRET: pxiMvGOymNehLIfMGpBQyF2c0QKif5EEjeFrNU8Kymln1vnnTV
+      JWT_EXPIRES_IN: 90d
+    depends_on:
+      - mongodb
+    ports:
+      - '5173:5173'
+      - '5000:5000'
+
+volumes:
+  mongodb_data:

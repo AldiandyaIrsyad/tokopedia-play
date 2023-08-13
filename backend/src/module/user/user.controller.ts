@@ -69,7 +69,6 @@ export class UserController implements IUserController {
 
   public async getMe(req: Request, res: Response): Promise<void> {
     try {
-      console.log('running GetMe');
       const user = await this.userService.getByToken(req.cookies.token);
       res.status(200).json(user);
     } catch (error) {

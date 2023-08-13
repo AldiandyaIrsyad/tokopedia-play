@@ -25,9 +25,9 @@ RUN npm run build --prefix frontend
 
 
 
-
 # Expose port 5173 for the application
 EXPOSE 5173
+EXPOSE 5000
 
 # run npm start and npm run preview --prefix frontend 
 CMD ["npm", "run", "both-prod"]

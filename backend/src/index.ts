@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import { Seeding } from './seeder';
 
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -88,8 +89,18 @@ server.listen(5000, () => {
   console.log('Server started');
 });
 
-mongoose.connection.on('connected', () => {
+mongoose.connection.on('connected', async () => {
   console.log('Connected to MongoDB');
+  if (process.env.seed === 'true') {
+    // delete all data in database
+    await mongoose.connection.db.dropDatabase();
+    await Seeding(
+      userModelInstance,
+      productModelInstance,
+      videoModelInstance,
+      commentModelInstance
+    );
+  }
 });
 
 mongoose.connection.on('error', (err) => {

@@ -26,7 +26,6 @@ export class VideoController implements IVideoController {
   public async getAllVideos(req: Request, res: Response): Promise<void> {
     try {
       const { video_title } = req.query;
-      console.log('video_title:', video_title);
       const videos = await this.videoService.getAll(video_title as string);
       res.status(200).json(videos);
     } catch (error) {
