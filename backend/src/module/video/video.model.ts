@@ -21,6 +21,8 @@ export interface IVideoModel {
   getAll(): Promise<IVideo[]>;
   getVideosByUserId(userId: string): Promise<IVideo[]>;
   getVideosByTitle(title: string): Promise<IVideo[]>;
+
+  createMany(videos: IVideo[]): Promise<IVideo[]>;
 }
 
 export class VideoModel implements IVideoModel {
@@ -32,6 +34,10 @@ export class VideoModel implements IVideoModel {
 
   public create(video: IVideo): Promise<IVideo> {
     return this.model.create(video);
+  }
+
+  public createMany(videos: IVideo[]): Promise<IVideo[]> {
+    return this.model.insertMany(videos);
   }
 
   public getById(id: string): Promise<IVideo | null> {

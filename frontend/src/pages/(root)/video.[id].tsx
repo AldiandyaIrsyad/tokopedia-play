@@ -1,35 +1,13 @@
 import { useParams } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
-import { useAxios } from '../../hooks';
+import { useAxios, useVideo } from '../../hooks';
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
 export default function video() {
   const { id } = useParams();
   const axios = useAxios();
-  const [video, setVideo] = useState<IVideo>({
-    title: '',
-    thumbnail: '',
-    url: '',
-    views: 0,
-    createdAt: new Date(),
-    user: {},
-    comments: [],
-    products: [],
-  } as IVideo);
-
-  const getVideo = async () => {
-    const { data } = await axios.get(`/api/video/${id}`);
-    const regex =
-      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)/g;
-    const youtubeId = data.url.match(regex)[0].split('=')[1];
-    data.url = `https://www.youtube.com/embed/${youtubeId}`;
-    setVideo(data);
-  };
-
-  useEffect(() => {
-    getVideo();
-  }, []);
+  const video = useVideo(id as string);
 
   const [comments, setComments] = useState<IComment[]>([]);
 
@@ -166,17 +144,6 @@ function Comment({ comment }: any) {
       </div>
     </div>
   );
-}
-
-interface IVideo extends Document {
-  title: string;
-  thumbnail: string;
-  url: string;
-  views?: number;
-  createdAt?: Date;
-  user?: any;
-  comments?: any;
-  products?: any;
 }
 
 interface IComment extends Document {

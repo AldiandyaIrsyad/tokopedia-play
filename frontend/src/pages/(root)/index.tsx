@@ -14,14 +14,10 @@ export default function index() {
   const location = useLocation();
 
   async function getVideos() {
-    // const { data } = await axios.get(`/api/video${window.location.search}`);
     const { data } = await axios.get(`/api/video${location.search}`);
     setVideos(data);
   }
 
-  // useEffect(() => {
-  //   getVideos();
-  // }, [window.location.search]);
 
   useEffect(() => {
     getVideos();

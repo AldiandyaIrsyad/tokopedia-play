@@ -19,6 +19,7 @@ export interface ICommentModel {
   getAll(): Promise<IComment[]>;
   getCommentsByVideoId(videoId: string): Promise<IComment[]>;
   getCommentsByUserId(userId: string): Promise<IComment[]>;
+  createMany(comments: IComment[]): Promise<IComment[]>;
 }
 
 export class CommentModel implements ICommentModel {
@@ -33,11 +34,15 @@ export class CommentModel implements ICommentModel {
     this.getAll = this.getAll.bind(this);
     this.getCommentsByVideoId = this.getCommentsByVideoId.bind(this);
     this.getCommentsByUserId = this.getCommentsByUserId.bind(this);
+    this.createMany = this.createMany.bind(this);
   }
 
   async create(comment: IComment): Promise<IComment> {
-    
     return this.model.create(comment);
+  }
+
+  async createMany(comments: IComment[]): Promise<IComment[]> {
+    return this.model.create(comments);
   }
 
   async getById(id: string): Promise<IComment | null> {

@@ -26,33 +26,25 @@ export class CommentService implements ICommentService {
     token: string,
     videoId: string
   ): Promise<IComment> => {
-    console.log('createservice  ');
     const userId = getUserIdFromToken(token);
-    console.log('createservice  ');
 
     const user = await this.userModel.getById(userId);
-    console.log('createservice  ');
 
     if (!user) {
       throw new Error('User not found');
     }
-    console.log('createservice  4');
 
     const video = await this.videoModel.getById(videoId);
-    console.log('createservice  5');
 
     if (!video) {
       throw new Error('Video not found');
     }
-    console.log(text);
 
     const comment = await this.commentModel.create({
       text,
       user,
       video,
     } as IComment);
-
-    console.log('createservice  7');
 
     this.commentSocket.addComment(comment);
 

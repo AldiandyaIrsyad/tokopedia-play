@@ -20,6 +20,7 @@ export interface IProductModel {
   getProductsByVideoId(videoId: string): Promise<IProduct[]>;
   getProductsByUserId(userId: string): Promise<IProduct[]>;
   searchProductsByTitle(title: string): Promise<IProduct[]>;
+  createMany(products: IProduct[]): Promise<IProduct[]>;
 }
 
 export class ProductModel implements IProductModel {
@@ -38,6 +39,10 @@ export class ProductModel implements IProductModel {
 
   public async create(product: IProduct): Promise<IProduct> {
     return this.model.create(product);
+  }
+
+  public async createMany(products: IProduct[]): Promise<IProduct[]> {
+    return this.model.insertMany(products);
   }
 
   public async getById(id: string): Promise<IProduct | null> {

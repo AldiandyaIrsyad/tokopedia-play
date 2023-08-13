@@ -1,0 +1,8 @@
+[Unit]
+Description=myService 
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/

@@ -1,10 +1,10 @@
 import dotenv from 'dotenv';
-import mongoose from './database/db';
 import express from 'express';
 
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 dotenv.config();
+import mongoose from './database/db';
 
 // import everything in api/user
 import {

@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node backend/dist/index.js",
     "dev": "concurrently \"tsc -w\" \"nodemon backend/dist/index.js\"",
-    "seeder": "tsc --build && node backend/dist/seeder.js"
+    "seeder": "tsc --build && node backend/dist/seeder.js",
+    "prod": "concurrently  --kill-others \"tsc -w\" \"nodemon backend/dist/index.js\" \"npm run dev --prefix frontend\" "
   },
   "keywords": [],
   "author": "Aldiandya Irsyad",

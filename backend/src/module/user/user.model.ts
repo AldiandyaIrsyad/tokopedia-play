@@ -23,6 +23,7 @@ export interface IUserModel {
   login(email: string, password: string): Promise<IUser | null>;
   getAll(): Promise<IUser[]>;
   getById(id: string): Promise<IUser | null>;
+  createMany(users: IUser[]): Promise<IUser[]>;
 }
 
 export class UserModel {
@@ -36,10 +37,16 @@ export class UserModel {
     this.login = this.login.bind(this);
     this.getAll = this.getAll.bind(this);
     this.getById = this.getById.bind(this);
+    this.createMany = this.createMany.bind(this);
   }
 
   public async create(user: IUser): Promise<IUser> {
     return await this.model.create(user);
+  }
+
+  // insertMany
+  public async createMany(users: IUser[]): Promise<IUser[]> {
+    return await this.model.insertMany(users);
   }
 
   public async login(email: string, password: string): Promise<IUser | null> {
