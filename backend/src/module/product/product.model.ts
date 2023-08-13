@@ -4,6 +4,7 @@ import { IUser } from '../user/user.model';
 import { IVideo } from '../video/video.model';
 
 export interface IProduct extends Document {
+  _id?: string;
   title: string;
   url: string;
   thumbnail_url: string;

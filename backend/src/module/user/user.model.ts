@@ -7,6 +7,7 @@ import { IProduct } from '../product/product.model';
 import bcrypt from 'bcrypt';
 
 export interface IUser extends Document {
+  _id?: string;
   username: string;
   email: string;
   role: 'admin' | 'user';
