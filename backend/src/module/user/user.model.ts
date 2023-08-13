@@ -127,6 +127,20 @@ const defineModel = (connection: Connection): Model<IUser> => {
     next();
   });
 
+  // saveMany
+  UserSchema.pre<IUser[]>('insertMany', async function (next) {
+    const users = this as IUser[];
+
+    for (const user of users) {
+      if (!user.isModified('password')) continue;
+
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password!, salt);
+    }
+
+    next();
+  });
+
   UserSchema.methods.comparePassword = async function (password: string) {
     return await bcrypt.compare(password, this.password!);
   };

@@ -41,10 +41,13 @@ async function Seeding() {
       } as IUser;
 
       insertUser.push(user);
+
+      const createdUser = await userModelInstance.create(user);
+      users.push(createdUser);
     }
 
-    const createdUsers = await userModelInstance.createMany(insertUser);
-    users.push(...createdUsers);
+    // const createdUsers = await userModelInstance.createMany(insertUser);
+    // users.push(...createdUsers);
 
     const user = {
       username: `admin`,
@@ -91,10 +94,17 @@ async function Seeding() {
       },
     ];
 
-    const createdVideos = await videoModelInstance.createMany(
-      insertVideo as any
-    );
-    videos.push(...createdVideos);
+    for (let i = 0; i < insertVideo.length; i++) {
+      const createdVideo = await videoModelInstance.create(
+        insertVideo[i] as any
+      );
+      videos.push(createdVideo);
+    }
+
+    // const createdVideos = await videoModelInstance.createMany(
+    //   insertVideo as any
+    // );
+    // videos.push(...createdVideos);
 
     const insertProduct = [
       {
@@ -130,10 +140,17 @@ async function Seeding() {
       },
     ];
 
-    const createdProducts = await productModelInstance.createMany(
-      insertProduct as any
-    );
-    products.push(...createdProducts);
+    // const createdProducts = await productModelInstance.createMany(
+    //   insertProduct as any
+    // );
+    // products.push(...createdProducts);
+
+    for (let i = 0; i < insertProduct.length; i++) {
+      const createdProduct = await productModelInstance.create(
+        insertProduct[i] as any
+      );
+      products.push(createdProduct);
+    }
 
     const insertComment = [];
 
@@ -145,12 +162,15 @@ async function Seeding() {
       } as IComment;
 
       insertComment.push(comment);
+
+      const createdComment = await commentModelInstance.create(comment);
+      comments.push(createdComment);
     }
 
-    const createdComments = await commentModelInstance.createMany(
-      insertComment as any
-    );
-    comments.push(...createdComments);
+    // const createdComments = await commentModelInstance.createMany(
+    //   insertComment as any
+    // );
+    // comments.push(...createdComments);
 
     process.exit(0);
   });

@@ -126,6 +126,35 @@ const defineModel = (connection: Connection): Model<IProduct> => {
     next();
   });
 
+  ProductSchema.pre<IProduct[]>('insertMany', async function (next) {
+    const products = this as IProduct[];
+
+    const UserModel = mongoose.model<IUser>('User');
+    const VideoModel = mongoose.model<IVideo>('Video');
+
+    const videoIds = products.map((product) => product.video);
+
+    await VideoModel.updateMany(
+      { _id: { $in: videoIds } },
+      {
+        $push: { products: { $each: products.map((product) => product._id) } },
+      },
+      { $slice: { products: -30 } }
+    );
+
+    const userIds = products.map((product) => product.user);
+
+    await UserModel.updateMany(
+      { _id: { $in: userIds } },
+      {
+        $push: { products: { $each: products.map((product) => product._id) } },
+      },
+      { $slice: { products: -30 } }
+    );
+
+    next();
+  });
+
   ProductSchema.pre(/^remove$/, async function (next) {
     const product = this as IProduct;
 

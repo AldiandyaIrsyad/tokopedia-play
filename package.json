@@ -8,7 +8,9 @@
     "start": "node backend/dist/index.js",
     "dev": "concurrently \"tsc -w\" \"nodemon backend/dist/index.js\"",
     "seeder": "tsc --build && node backend/dist/seeder.js",
-    "prod": "concurrently  --kill-others \"tsc -w\" \"nodemon backend/dist/index.js\" \"npm run dev --prefix frontend\" "
+    "build": "tsc --build",
+    "both": "concurrently  --kill-others \"tsc -w\" \"nodemon backend/dist/index.js\" \"npm run dev --prefix frontend\" ",
+    "both-prod": "concurrently --kill-others \"npm run start\" \"npm run preview --prefix frontend\" "
   },
   "keywords": [],
   "author": "Aldiandya Irsyad",
